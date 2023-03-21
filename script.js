@@ -1,57 +1,91 @@
+const containerProductos = document.querySelector(".tabla__contenido");
+const containerActualizacion = document.querySelector(".sectionActualizar");
+
 let arrayProductos = [];
 const formulario = document.getElementById("formulario");
 formulario.addEventListener("submit", agregarDatos);
 
-function agregarDatos (event){
-    event.preventDefault();
-    
-    const nombre = document.getElementById("nombre").value;
-    const precio = document.getElementById("precio").value;
-    const cantidad = document.getElementById("cantidad").value;
-    const categoria = document.getElementById("categoria").value;
+function agregarDatos(event) {
+  event.preventDefault();
 
-    const producto = {
-        nombre,
-        precio,
-        cantidad,
-        categoria
-    };
+  const nombre = document.getElementById("nombre").value;
+  const precio = document.getElementById("precio").value;
+  const cantidad = document.getElementById("cantidad").value;
+  const categoria = document.getElementById("categoria").value;
 
-    arrayProductos.push(producto);
-    console.log(arrayProductos);
+  const producto = {
+    nombre,
+    precio,
+    cantidad,
+    categoria,
+  };
 
-    formulario.reset();
-    formulario.nombre.focus();
-    mostrarProductos();
+  arrayProductos.push(producto);
+  console.log(arrayProductos);
+
+  formulario.reset();
+  formulario.nombre.focus();
+  imprimirProductos(containerProductos, arrayProductos);
+}
+
+const imprimirProductos = (containerProductos, listaProductos) => {
+  containerProductos.innerHTML = "";
+
+  listaProductos.forEach((producto, indice) => {
+    containerProductos.innerHTML += `
+            <tbody>
+                <tr id="${indice}">
+                    <td>${indice}</td>
+                    <td>${producto.nombre}</td>
+                    <td>${producto.precio}</td>
+                    <td>${producto.cantidad}</td>
+                    <td>${producto.categoria}</td>
+                    <td><button onclick="eliminarProducto(${indice})">Eliminar</button>
+                    <button onclick="actualizarProducto(${indice})">Actualizar</button></td>
+                </tr>
+            </tbody>
+        `;
+  });
 };
 
-function mostrarProductos() {
-    const tabla = document.getElementById("tabla").getElementsByTagName("tbody")[0];
-    tabla.innerHTML = "";
-    
-    arrayProductos.forEach((producto) => {
-      const fila = tabla.insertRow();
+function eliminarProducto(indice) {
+  const productoAEliminar = document.getElementById(indice);
+  productoAEliminar.remove();
+  arrayProductos.splice(indice, 1);
+  console.log(arrayProductos);
 
-      const celdaNombre = fila.insertCell();
-      celdaNombre.innerHTML = producto.nombre;
-      
-      const celdaPrecio = fila.insertCell();
-      celdaPrecio.innerHTML = producto.precio;
-      
-      const celdaCantidad = fila.insertCell();
-      celdaCantidad.innerHTML = producto.cantidad;
-      
-      const celdaCategoria = fila.insertCell();
-      celdaCategoria.innerHTML = producto.categoria;
+  imprimirProductos(containerProductos, arrayProductos);
+}
 
-      const celdaAcciones = fila.insertCell();
+const containerActualizar = document.querySelector(".botonActualizar");
 
-      const botonEliminar = document.createElement("button");
-      botonEliminar.innerHTML = "Eliminar";
-      celdaAcciones.appendChild(botonEliminar);
+function actualizarProducto(indice) {
+  document.getElementById("nombre").value = `${arrayProductos[indice].nombre}`;
+  document.getElementById("precio").value = `${arrayProductos[indice].precio}`;
+  document.getElementById("cantidad").value = `${arrayProductos[indice].cantidad}`;
+  document.getElementById("categoria").value = `${arrayProductos[indice].categoria}`;
 
-      const botonActualizar = document.createElement("button");
-      botonActualizar.innerHTML = "Actualizar";
-      celdaAcciones.appendChild(botonActualizar);
-    });
+  const seccionActualizar = document.createElement("section_actualizar");
+  seccionActualizar.innerHTML = `<br><button onclick="actualizarTabla(${indice}, event)">Actualizar Campos</button>`;
+  containerActualizacion.appendChild(seccionActualizar);
+  imprimirProductos(containerProductos, arrayProductos);
+}
+
+const actualizarTabla = (indice, event) => {
+  event.preventDefault();
+  nombre = document.getElementById("nombre").value;
+  precio = document.getElementById("precio").value;
+  cantidad = document.getElementById("cantidad").value;
+  categoria = document.getElementById("categoria").value;
+
+  arrayProductos[indice] = {
+    nombre: `${nombre}`,
+    precio: `${precio}`,
+    cantidad: `${cantidad}`,
+    categoria: `${categoria}`,
+  };
+  
+  formulario.reset();
+  imprimirProductos(containerProductos, arrayProductos);
+  
 };

@@ -19,11 +19,13 @@
         <label for="categoria">Categoria:</label>
         <input type="text" name="categoria" id="categoria"><br><br>
         <input type="submit" value="Agregar Producto" onclick="agregarDatos(event)">
+        <section class="sectionActualizar"></section>
     </form>
     <br>
     <table id="tabla">
         <thead>
             <tr>
+                <th>ID</th>
                 <th>Nombre</th>
                 <th>Precio</th>
                 <th>Cantidad</th>
@@ -31,7 +33,7 @@
                 <th>Acciones</th>
             </tr>
         </thead>
-        <tbody></tbody>
+        <tbody class="tabla__contenido"></tbody>
     </table>
 
     <script src="./script.js"></script>
